@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LocalConnect | SDG 8</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
+body{
+background:#f5f7fa;
+}
+
+header{
+background:#0d6efd;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.hero{
+padding:60px 20px;
+text-align:center;
+background:white;
+}
+
+.hero h1{
+font-size:42px;
+margin-bottom:15px;
+}
+
+.hero p{
+font-size:18px;
+color:#555;
+max-width:800px;
+margin:auto;
+}
+
+.container{
+padding:30px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+gap:20px;
+}
+
+.card{
+background:black;
+padding:20px;
+border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,0.1);
+}
+
+.card h2{
+margin-bottom:15px;
+color:#0d6efd;
+}
+
+input,select{
+width:100%;
+padding:12px;
+margin:8px 0;
+border:1px solid #ccc;
+border-radius:8px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#0d6efd;
+color:white;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-size:16px;
+}
+
+button:hover{
+background:#084fc7;
+}
+
+.list{
+margin-top:15px;
+}
+
+.item{
+padding:12px;
+background:#eef4ff;
+margin-bottom:10px;
+border-radius:8px;
+}
+
+.stats{
+display:flex;
+justify-content:center;
+gap:30px;
+flex-wrap:wrap;
+margin-top:30px;
+}
+
+.stat-box{
+background:white;
+padding:25px;
+width:220px;
+text-align:center;
+border-radius:15px;
+box-shadow:0 4px 10px rgba(0,0,0,.1);
+}
+
+.stat-box h3{
+font-size:35px;
+color:#0d6efd;
+}
+
+footer{
+background:#222;
+color:pink;
+text-align:center;
+padding:15px;
+margin-top:30px;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>SDG 8 - Locallift</h1>
+<p>Strengthening Local Economic Collaboration Through Digital Connectivity</p>
+</header>
+
+<section class="hero">
+<h1>Empowering Local Businesses</h1>
+<p>
+Connect artisans, retailers, service providers, and job seekers
+on a single digital platform to promote local economic growth.
+</p>
+</section>
+
+<div class="stats">
+
+<div class="stat-box">
+<h3 id="businessCount">0</h3>
+<p>Businesses</p>
+</div>
+
+<div class="stat-box">
+<h3 id="productCount">0</h3>
+<p>Products</p>
+</div>
+
+<div class="stat-box">
+<h3 id="jobCount">0</h3>
+<p>Jobs Posted</p>
+</div>
+
+</div>
+
+<div class="container">
+
+<div class="grid">
+
+<!-- Business Registration -->
+
+<div class="card">
+<h2>Business Registration</h2>
+
+<input type="text" id="businessName"
+placeholder="Business Name">
+
+<input type="text" id="ownerName"
+placeholder="Owner Name">
+
+<button onclick="addBusiness()">
+Register Business
+</button>
+
+<div class="list" id="businessList"></div>
+
+</div>
+
+<!-- Product Marketplace -->
+
+<div class="card">
+
+<h2>Local Products</h2>
+
+<input type="text" id="productName"
+placeholder="Product Name">
+
+<input type="text" id="productPrice"
+placeholder="Price">
+
+<button onclick="addProduct()">
+Add Product
+</button>
+
+<div class="list" id="productList"></div>
+
+</div>
+
+<!-- Job Board -->
+
+<div class="card">
+
+<h2>Job Opportunities</h2>
+
+<input type="text" id="jobTitle"
+placeholder="Job Title">
+
+<input type="text" id="company"
+placeholder="Company">
+
+<button onclick="addJob()">
+Post Job
+</button>
+
+<div class="list" id="jobList"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
+LocalConnect | SDG 8 | Decent Work and Economic Growth
+</footer>
+
+<script>
+
+let businesses =
+JSON.parse(localStorage.getItem("businesses")) || [];
+
+let products =
+JSON.parse(localStorage.getItem("products")) || [];
+
+let jobs =
+JSON.parse(localStorage.getItem("jobs")) || [];
+
+function updateStats(){
+
+document.getElementById("businessCount")
+.innerText=businesses.length;
+
+document.getElementById("productCount")
+.innerText=products.length;
+
+document.getElementById("jobCount")
+.innerText=jobs.length;
+}
+
+function addBusiness(){
+
+let name =
+document.getElementById("businessName").value;
+
+let owner =
+document.getElementById("ownerName").value;
+
+if(name===""||owner==="") return;
+
+businesses.push({name,owner});
+
+localStorage.setItem(
+"businesses",
+JSON.stringify(businesses)
+);
+
+displayBusinesses();
+
+document.getElementById("businessName").value="";
+document.getElementById("ownerName").value="";
+}
+
+function displayBusinesses(){
+
+let list =
+document.getElementById("businessList");
+
+list.innerHTML="";
+
+businesses.forEach(b=>{
+
+list.innerHTML += `
+<div class="item">
+<strong>${b.name}</strong><br>
+Owner: ${b.owner}
+</div>
+`;
+
+});
+
+updateStats();
+}
+
+function addProduct(){
+
+let product =
+document.getElementById("productName").value;
+
+let price =
+document.getElementById("productPrice").value;
+
+if(product===""||price==="") return;
+
+products.push({product,price});
+
+localStorage.setItem(
+"products",
+JSON.stringify(products)
+);
+
+displayProducts();
+
+document.getElementById("productName").value="";
+document.getElementById("productPrice").value="";
+}
+
+function displayProducts(){
+
+let list =
+document.getElementById("productList");
+
+list.innerHTML="";
+
+products.forEach(p=>{
+
+list.innerHTML += `
+<div class="item">
+<strong>${p.product}</strong><br>
+₹${p.price}
+</div>
+`;
+
+});
+
+updateStats();
+}
+
+function addJob(){
+
+let title =
+document.getElementById("jobTitle").value;
+
+let company =
+document.getElementById("company").value;
+
+if(title===""||company==="") return;
+
+jobs.push({title,company});
+
+localStorage.setItem(
+"jobs",
+JSON.stringify(jobs)
+);
+
+displayJobs();
+
+document.getElementById("jobTitle").value="";
+document.getElementById("company").value="";
+}
+
+function displayJobs(){
+
+let list =
+document.getElementById("jobList");
+
+list.innerHTML="";
+
+jobs.forEach(j=>{
+
+list.innerHTML += `
+<div class="item">
+<strong>${j.title}</strong><br>
+${j.company}
+</div>
+`;
+
+});
+
+updateStats();
+}
+
+displayBusinesses();
+displayProducts();
+displayJobs();
+
+</script>
+
+</body>
+</html>
